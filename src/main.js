@@ -1,8 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import gAuthPlugin from 'vue3-google-oauth2';
+import router from './router'
 
-const app = createApp(App)
+const app = createApp(App).use(router)
 let gauthClientId = "712407789741-m2f1g999bvqth0t7gbfv4b49qvgutdf2.apps.googleusercontent.com";
 
 const gauthOption = {
@@ -11,7 +12,7 @@ const gauthOption = {
     prompt: 'select_account',
     plugin_name: 'chat'
 };
-  
+
 app.use(gAuthPlugin, gauthOption)
 
 app.mount('#app')

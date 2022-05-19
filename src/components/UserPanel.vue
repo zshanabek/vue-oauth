@@ -1,5 +1,8 @@
 <template>
-  <div class="panel">
+  <div v-if="showLoading">
+    Loading...
+  </div>
+  <div v-else class="panel">
     <div class="panel-header text-center">
       <figure class="avatar avatar-lg">
         <img v-if="user.photo" :src="user.photo" alt="Avatar">
@@ -28,8 +31,39 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
-  name: 'UserPanel',
-  props: ['user']
+  name: 'UsersProfile',
+  components: {
+  },
+  data() {
+    return {
+      user: {
+        first_name: '',
+        last_name: '',
+        username: '',
+        email: '',
+        photo: '',
+      },
+      showLoading: false
+    }
+  },
+  created() {
+    this.getProfile()
+  },
+  methods: {
+    getProfile() {
+      this.showLoading = true
+      const access_token = localStorage.getItem('access_token')
+      axios.get('http://localhost:8000/dj-rest-auth/user/', { headers: { Authorization:`Bearer ${access_token}`}})
+        .then(res => {
+          this.user = res.data
+          this.showLoading = false
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+    },
+  }
 }
 </script>
