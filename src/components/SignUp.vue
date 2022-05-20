@@ -1,5 +1,5 @@
 <template>
-  <form v-if="!user" @submit.prevent="signUp">
+  <form @submit.prevent="signUp">
     <div class="form-group">
       <label class="form-label" for="input-example-1">Email</label>
       <input v-model="email" class="form-input" type="email" id="input-example-1" placeholder="email">
@@ -18,6 +18,7 @@
 
 <script>
 import axios from 'axios'
+import router from '@/router'
 
 export default {
   name: "SignUp",
@@ -35,7 +36,8 @@ export default {
         password1: this.password1,
         password2: this.password2,
       }).then(res => {
-        localStorage.setItem('access_token', JSON.stringify(res.data.access_token))
+        localStorage.setItem('access_token', res.data.access_token)
+        router.replace({ path: '/profile' })
       })
     },
   },

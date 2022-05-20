@@ -1,5 +1,5 @@
 <template>
-  <form v-if="!user" @submit.prevent="usualSignIn">
+  <form @submit.prevent="usualSignIn">
     <div class="form-group">
       <label class="form-label" for="input-example-1">Email</label>
       <input v-model="email" class="form-input" type="email" id="input-example-1" placeholder="email">
@@ -10,14 +10,7 @@
     </div>
     <button class="btn btn-primary mb-2">Sign in usually</button>
   </form>
-  <div v-if="!user">
-    <button class="btn btn-primary" @click="handleClickSignIn">Sign in via Google</button>
-  </div>
-  <div v-else>
-    <button class="btn btn-primary" @click="handleClickGetAuthCode" :disabled="!Vue3GoogleOauth.isInit">get authCode</button>
-    <button class="btn btn-primary" @click="handleClickSignOut" :disabled="!Vue3GoogleOauth.isAuthorized">sign out</button>
-    <button class="btn btn-primary" @click="handleClickDisconnect" :disabled="!Vue3GoogleOauth.isAuthorized">disconnect</button>
-  </div>
+  <button class="btn btn-primary" @click="handleClickSignIn">Sign in via Google</button>
 </template>
 
 <script>
@@ -27,11 +20,6 @@ import router from '@/router'
 
 export default {
   name: "SignIn",
-  components: {
-  },
-  props: {
-    msg: String,
-  },
   data(){
     return {
       email: '',
@@ -60,7 +48,8 @@ export default {
           access_token: token
         })
           .then(resp => {
-            this.user = resp.data.user
+            localStorage.setItem('access_token', resp.data.access_token)
+            router.replace({ path: '/profile' })
           })
           .catch(err => {
             console.log(err.response)
