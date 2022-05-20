@@ -14,29 +14,13 @@
 </template>
 
 <script>
-import { inject, toRefs } from "vue";
+import { inject, ref, toRefs } from "vue";
 import axios from 'axios'
 import router from '@/router'
 
 export default {
   name: "SignIn",
-  data(){
-    return {
-      email: '',
-      password: '',
-    }
-  },
   methods: {
-    usualSignIn() {
-      axios.post('http://localhost:8000/dj-rest-auth/login/', {
-        email: this.email,
-        password: this.password,
-      }).then(res => {
-        localStorage.setItem('access_token', res.data.access_token)
-        router.replace({ path: '/profile' })
-      })
-
-    },
     async handleClickSignIn(){
       try {
         const googleUser = await this.$gAuth.signIn();
@@ -59,35 +43,29 @@ export default {
         console.error(error);
         return null;
       }
-    },
-    async handleClickGetAuthCode(){
-      try {
-        const authCode = await this.$gAuth.getAuthCode();
-        console.log("authCode", authCode);
-      } catch(error) {
-        //on fail do something
-        console.error(error);
-        return null;
-      }
-    },
-    async handleClickSignOut() {
-      try {
-        await this.$gAuth.signOut();
-        console.log("isAuthorized", this.Vue3GoogleOauth.isAuthorized);
-        this.user = "";
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    handleClickDisconnect() {
-      window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;
-    },
+    }
   },
   setup(props) {
+    const email = ref('')
+    const password = ref('')
     const { isSignIn } = toRefs(props);
     const Vue3GoogleOauth = inject("Vue3GoogleOauth");
     const handleClickLogin = () => {};
+
+    function usualSignIn() {
+      axios.post('http://localhost:8000/dj-rest-auth/login/', {
+        email: email.value,
+        password: password.value,
+      }).then(res => {
+        localStorage.setItem('access_token', res.data.access_token)
+        router.replace({ path: '/profile' })
+      })
+    }
+
     return {
+      usualSignIn,
+      email,
+      password,
       Vue3GoogleOauth,
       handleClickLogin,
       isSignIn,

@@ -19,27 +19,31 @@
 <script>
 import axios from 'axios'
 import router from '@/router'
+import { ref } from 'vue'
 
 export default {
   name: "SignUp",
-  data(){
-    return {
-      email: '',
-      password1: '',
-      password2: '',
-    }
-  },
-  methods: {
-    signUp() {
+  setup() {
+    const email = ref('')
+    const password1 = ref('')
+    const password2 = ref('')
+
+    function signUp() {
       axios.post('http://localhost:8000/dj-rest-auth/registration/', {
-        email: this.email,
-        password1: this.password1,
-        password2: this.password2,
+        email: email.value,
+        password1: password1.value,
+        password2: password2.value,
       }).then(res => {
         localStorage.setItem('access_token', res.data.access_token)
         router.replace({ path: '/profile' })
       })
-    },
-  },
+    }
+    return {
+      email,
+      password1,
+      password2,
+      signUp
+    }
+  }
 };
 </script>

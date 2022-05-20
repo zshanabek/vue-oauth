@@ -16,28 +16,34 @@
 
 <script>
 import router from "@/router"
+import { ref, onMounted } from "vue";
 
 export default {
   name: "SignUp",
-  data(){
-    return {
-      token: '',
+  setup() {
+    let token = ref('')
+    
+    onMounted(()=> {
+      isAuthenticated()
+    })
+  
+    function isAuthenticated() {
+      token.value = localStorage.getItem('access_token')
     }
-  },
-  mounted() {
-    this.isAuthenticated()
-  },
-  methods: {
-    isAuthenticated() {
-      this.token = localStorage.getItem('access_token')
-    },
-    logout() {
+    
+    function logout() {
       localStorage.removeItem('access_token')
-      this.token = ''
+      token.value = null
       router.replace({ path: '/sign-in' })
-    },
-  },
-};
+    }
+
+    return {
+      token,
+      logout,
+      isAuthenticated
+    }  
+  }
+}
 </script>
 
 <style>

@@ -4,17 +4,19 @@ import SignIn from '@/components/SignIn'
 import SignUp from '@/components/SignUp'
 
 const routes = [
-    {
-      path: '/sign-in',
-      component: SignIn
-    },
-    { 
-      path: '/sign-up',
-      component: SignUp
-    },
-    { path: '/profile', component: UserPanel },
-  ]
-
+  {
+    path: '/sign-in',
+    component: SignIn
+  },
+  { 
+    path: '/sign-up',
+    component: SignUp
+  },
+  {
+    path: '/profile',
+    component: UserPanel
+  },
+]
 
 const router = createRouter({
   history: createWebHashHistory(),

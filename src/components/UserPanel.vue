@@ -32,38 +32,45 @@
 </template>
 <script>
 import axios from 'axios'
+import { onMounted, ref } from 'vue'
+
 export default {
   name: 'UsersProfile',
-  components: {
-  },
-  data() {
-    return {
-      user: {
-        first_name: '',
-        last_name: '',
-        username: '',
-        email: '',
-        photo: '',
-      },
-      showLoading: false
-    }
-  },
-  created() {
-    this.getProfile()
-  },
-  methods: {
-    getProfile() {
-      this.showLoading = true
+  setup() {
+    let user = ref({
+      first_name: '',
+      last_name: '',
+      username: '',
+      email: '',
+      photo: '',
+    })
+    let showLoading = ref(false)
+
+    onMounted(() => {
+      getProfile()
+    })
+
+    function getProfile() {
+      showLoading.value = true
       const access_token = localStorage.getItem('access_token')
+      if (!access_token) {
+        this.$router.replace({ path: '/sign-in' })
+        return
+      }
       axios.get('http://localhost:8000/dj-rest-auth/user/', { headers: { Authorization:`Bearer ${access_token}`}})
         .then(res => {
-          this.user = res.data
-          this.showLoading = false
+          user.value = res.data
+          showLoading.value = false
         })
         .catch(err => {
           console.log(err.response)
         })
-    },
+    }
+    return {
+      user,
+      showLoading,
+      getProfile,
+    }
   }
 }
 </script>
