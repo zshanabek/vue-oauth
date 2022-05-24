@@ -31,8 +31,8 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import { onMounted, ref } from 'vue'
+import { usersService } from '@/services/users'
 
 export default {
   name: 'UsersProfile',
@@ -50,21 +50,10 @@ export default {
       getProfile()
     })
 
-    function getProfile() {
+    async function getProfile() {
       showLoading.value = true
-      const access_token = localStorage.getItem('access_token')
-      if (!access_token) {
-        this.$router.replace({ path: '/sign-in' })
-        return
-      }
-      axios.get('http://localhost:8000/dj-rest-auth/user/', { headers: { Authorization:`Bearer ${access_token}`}})
-        .then(res => {
-          user.value = res.data
-          showLoading.value = false
-        })
-        .catch(err => {
-          console.log(err.response)
-        })
+      user.value = await usersService.getProfile()
+      showLoading.value = false
     }
     return {
       user,

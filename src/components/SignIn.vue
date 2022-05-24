@@ -2,11 +2,11 @@
   <form @submit.prevent="usualSignIn">
     <div class="form-group">
       <label class="form-label" for="input-example-1">Email</label>
-      <input v-model="email" class="form-input" type="email" id="input-example-1" placeholder="email">
+      <input v-model="email" class="form-input" type="email" id="input-example-1" placeholder="email" required>
     </div>
     <div class="form-group">
       <label class="form-label" for="input-example-2">Password</label>
-      <input v-model="password" class="form-input" type="password" id="input-example-2" placeholder="password">
+      <input v-model="password" class="form-input" type="password" id="input-example-2" placeholder="password" required>
     </div>
     <button class="btn btn-primary mb-2">Sign in usually</button>
   </form>
@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import { inject, ref, toRefs } from "vue";
-import axios from 'axios'
+import { ref } from "vue";
 import router from '@/router'
+import { usersService } from '@/services/users'
 
 export default {
   name: "SignIn",
@@ -28,16 +28,8 @@ export default {
           return null;
         }
         const token = googleUser.xc.access_token
-        axios.post('http://localhost:8000/dj-rest-auth/google/', {
-          access_token: token
-        })
-          .then(resp => {
-            localStorage.setItem('access_token', resp.data.access_token)
-            router.replace({ path: '/profile' })
-          })
-          .catch(err => {
-            console.log(err.response)
-          })
+        await usersService.googleSignIn({access_token: token})
+        router.replace({ path: '/profile' })
       } catch (error) {
         //on fail do something
         console.error(error);
@@ -45,30 +37,23 @@ export default {
       }
     }
   },
-  setup(props) {
+  setup() {
     const email = ref('')
     const password = ref('')
-    const { isSignIn } = toRefs(props);
-    const Vue3GoogleOauth = inject("Vue3GoogleOauth");
-    const handleClickLogin = () => {};
 
-    function usualSignIn() {
-      axios.post('http://localhost:8000/dj-rest-auth/login/', {
+    async function usualSignIn() {
+      const payload = {
         email: email.value,
-        password: password.value,
-      }).then(res => {
-        localStorage.setItem('access_token', res.data.access_token)
-        router.replace({ path: '/profile' })
-      })
+        password: password.value
+      }
+      await usersService.signIn(payload)
+      router.replace({ path: '/profile' })
     }
 
     return {
       usualSignIn,
       email,
       password,
-      Vue3GoogleOauth,
-      handleClickLogin,
-      isSignIn,
     };
   },
 };
