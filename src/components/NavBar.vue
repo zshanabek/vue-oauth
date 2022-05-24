@@ -1,8 +1,9 @@
 <template>
   <nav>
     <div v-if="usersService.user">
+      <router-link to="/">Home</router-link>
       <router-link to="/profile">Profile</router-link>
-      <router-link to="/user-list">User List</router-link>
+      <router-link to="/user-list">UserList</router-link>
       <a @click="logout()"> Logout </a>
     </div>
     <div v-else>
@@ -27,17 +28,18 @@ async function logout() {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
 nav {
   padding: 30px;
+  text-align: center;
 }
 
 nav a {
   font-weight: bold;
   color: #2c3e50;
+  margin-left: 1em;
 }
 
 nav a.router-link-exact-active {

@@ -8,11 +8,11 @@ class UsersService {
   }
 
   async signIn(body) {
-    const user = (await post(`${process.env.VUE_APP_API}/dj-rest-auth/login/`, body)).data
-    this.user = user
-    localStorage.setItem('access_token', user.access_token)
-    localStorage.setItem('user', JSON.stringify(user))
-    return user
+    const data = (await post(`${process.env.VUE_APP_API}/dj-rest-auth/login/`, body)).data
+    this.user = data.user
+    localStorage.setItem('access_token', data.access_token)
+    localStorage.setItem('user', JSON.stringify(this.user))
+    return this.user
   }
 
   async logout() {
@@ -23,11 +23,11 @@ class UsersService {
   }
 
   async signUp(body) {
-    const user = (await post(`${process.env.VUE_APP_API}/dj-rest-auth/registration/`, body)).data
-    this.user = user
-    localStorage.setItem('access_token', user.access_token)
-    localStorage.setItem('user', JSON.stringify(user))
-    return user
+    const data = (await post(`${process.env.VUE_APP_API}/dj-rest-auth/registration/`, body)).data
+    this.user = data.user
+    localStorage.setItem('access_token', data.access_token)
+    localStorage.setItem('user', JSON.stringify(this.user))
+    return this.user
   }
 
   async getProfile() {
@@ -41,11 +41,11 @@ class UsersService {
   }
 
   async googleSignIn(body) {
-    const user = (await post(`${process.env.VUE_APP_API}/dj-rest-auth/google/`, body)).data
-    this.user = user
-    localStorage.setItem('access_token', user.access_token)
-    localStorage.setItem('user', JSON.stringify(user))
-    return user
+    const data = (await post(`${process.env.VUE_APP_API}/dj-rest-auth/google/`, body)).data
+    this.user = data.user
+    localStorage.setItem('access_token', data.access_token)
+    localStorage.setItem('user', JSON.stringify(this.user))
+    return this.user
   }
 }
 
