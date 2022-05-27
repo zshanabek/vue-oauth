@@ -27,7 +27,8 @@ export default {
         if (!googleUser) {
           return null;
         }
-        const token = googleUser.xc.access_token
+        console.log(googleUser);
+        const token = googleUser.zc.access_token
         await usersService.googleSignIn({access_token: token})
         router.replace({ path: '/profile' })
       } catch (error) {
