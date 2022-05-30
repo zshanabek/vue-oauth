@@ -22,14 +22,18 @@ export default {
   name: "SignIn",
   methods: {
     async handleClickSignIn(){
+      let access_token = ''
       try {
         const googleUser = await this.$gAuth.signIn();
         if (!googleUser) {
           return null;
         }
-        console.log(googleUser);
-        const token = googleUser.xc.access_token
-        await usersService.googleSignIn({access_token: token})
+        if (process.env.NODE_ENV === 'development') {
+          access_token = googleUser.xc.access_token
+        } else {
+          access_token = googleUser.zc.access_token
+        }
+        await usersService.googleSignIn({access_token})
         router.replace({ path: '/profile' })
       } catch (error) {
         //on fail do something
