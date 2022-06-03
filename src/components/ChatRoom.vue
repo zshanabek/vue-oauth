@@ -67,7 +67,8 @@ function newlineForMessage() {
 }
 
 onMounted(() => {
-  chatSocket = new WebSocket(`${process.env.VUE_APP_API_WS}/ws/chats/${usersService.user.id}/${receiver_id}/`);
+  const url = `${process.env.VUE_APP_API_WS}/ws/chats/${usersService.user.id}/${receiver_id}/`
+  chatSocket = new WebSocket(url);
   chatSocket.onopen = () => {
     fetchMessages();
   };
