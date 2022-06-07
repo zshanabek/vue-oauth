@@ -8,7 +8,7 @@ class UsersService {
   }
 
   async signIn(body) {
-    const data = (await post(`${process.env.VUE_APP_API}/dj-rest-auth/login/`, body)).data
+    const data = (await post(`https://django-oauth.herokuapp.com/dj-rest-auth/login/`, body)).data
     this.user = data.user
     localStorage.setItem('access_token', data.access_token)
     localStorage.setItem('user', JSON.stringify(this.user))
@@ -16,14 +16,14 @@ class UsersService {
   }
 
   async logout() {
-    await post(`${process.env.VUE_APP_API}/dj-rest-auth/logout/`)
+    await post(`https://django-oauth.herokuapp.com/dj-rest-auth/logout/`)
     this.user = null
     localStorage.removeItem('user')
     localStorage.removeItem('access_token')
   }
 
   async signUp(body) {
-    const data = (await post(`${process.env.VUE_APP_API}/dj-rest-auth/registration/`, body)).data
+    const data = (await post(`https://django-oauth.herokuapp.com/dj-rest-auth/registration/`, body)).data
     this.user = data.user
     localStorage.setItem('access_token', data.access_token)
     localStorage.setItem('user', JSON.stringify(this.user))
@@ -32,16 +32,16 @@ class UsersService {
 
   async getProfile() {
     const access_token = localStorage.getItem('access_token')
-    const user = (await get(`${process.env.VUE_APP_API}/dj-rest-auth/user/`, { headers: { Authorization:`Bearer ${access_token}`}})).data
+    const user = (await get(`https://django-oauth.herokuapp.com/dj-rest-auth/user/`, { headers: { Authorization:`Bearer ${access_token}`}})).data
     return user
   }
 
   async getUserList() {
-    return (await get(`${process.env.VUE_APP_API}/users/`)).data
+    return (await get(`https://django-oauth.herokuapp.com/users/`)).data
   }
 
   async googleSignIn(body) {
-    const data = (await post(`${process.env.VUE_APP_API}/dj-rest-auth/google/`, body)).data
+    const data = (await post(`https://django-oauth.herokuapp.com/dj-rest-auth/google/`, body)).data
     this.user = data.user
     localStorage.setItem('access_token', data.access_token)
     localStorage.setItem('user', JSON.stringify(this.user))
