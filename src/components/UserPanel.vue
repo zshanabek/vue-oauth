@@ -30,36 +30,20 @@
     </div>
   </div>
 </template>
-<script>
+<script setup>
 import { onMounted, ref } from 'vue'
 import { usersService } from '@/services/users'
 
-export default {
-  name: 'UsersProfile',
-  setup() {
-    let user = ref({
-      first_name: '',
-      last_name: '',
-      username: '',
-      email: '',
-      photo: '',
-    })
-    let showLoading = ref(false)
+let user = ref({})
+let showLoading = ref(false)
 
-    onMounted(() => {
-      getProfile()
-    })
+onMounted(() => {
+  getProfile()
+})
 
-    async function getProfile() {
-      showLoading.value = true
-      user.value = await usersService.getProfile()
-      showLoading.value = false
-    }
-    return {
-      user,
-      showLoading,
-      getProfile,
-    }
-  }
+async function getProfile() {
+  showLoading.value = true
+  user.value = await usersService.getProfile()
+  showLoading.value = false
 }
 </script>
